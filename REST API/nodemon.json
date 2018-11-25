@@ -1,0 +1,9 @@
+{
+  "env":{
+    "ADDRESS":"127.0.0.1",
+    "PORT": "27017",
+    "dbname":"dbname",
+    "username":"username",
+    "password":"password"
+  }
+}

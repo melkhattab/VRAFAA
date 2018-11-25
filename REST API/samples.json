@@ -1,0 +1,22 @@
+{
+	"fname":"fname1",
+  "lname":"lname2",
+	"email":"email1@email.ma",
+  "password":"password1",
+}
+
+
+
+{
+  "fname":"fname1",
+  "lname":"lname1",
+  "description":"description1",
+  "videos": {
+    "url":"./videos/video1",
+    "durantion":65
+  },
+  "creator":"5bf9af1796899e159c7cf715",
+  "region":{
+    "regionname":"rhone alpes"
+  }
+}
