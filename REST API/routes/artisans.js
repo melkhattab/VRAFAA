@@ -1,49 +1,55 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const Artisant = require('../models/artisant');
+const Artisan = require('../models/artisan');
 const User = require('../models/user');
-
+const bodyParser = require("body-parser");
 
 /* Handling post request for adding an artisant
   Artisant will be attached to the user how have added it
 */
-router.post('/add_artisant',(req, res, next)=>{
-  const artisant = new Artisant({
+router.post('/add_artisan',(req, res, next)=>{
+  const artisan = new Artisan({
     _id : new mongoose.Types.ObjectId(),
     fname: req.body.fname,
     lname: req.body.lname,
     description: req.body.description,
-    videos: req.body.videos,
+//    videos: req.body.videos,
     creator:  req.body.creator,
-    region: req.body.region
+    location:{
+        latitude:req.body.latitude,
+        longitude:req.body.longitude,
+        city:req.body.city,
+        county: req.body.county,
+        state:req.body.state,
+      }
   });
-  artisant
+  
+  artisan
     .save()
     .then(result =>{
       res.status(200).json({
-        message: "The artisant have been added with success",
+        message: "The artisan has been added with success",
       });
     })
     .catch(err =>{
-      console.log('Artisant did not be added to dbase');
+      console.log('Artisan did not be added to data base');
     });
 
 });
-
 /*
   Handling Post request for getting Artisants by User
   (artisants added by user)
 */
-router.post('/artisantByUser',(req, res, next)=>{
-  Artisant.find({creator:req.body.userId})
+router.post('/artisanByUser',(req, res, next)=>{
+  Artisan.find({creator:req.body.userId})
   .exec()
   .then(users =>{
     res.status(200).json(users);
   })
   .catch(err =>{
     res.status(500).json({
-      message: 'No document found',
+      message: 'No artisan found',
     });
   });
 
@@ -52,32 +58,36 @@ router.post('/artisantByUser',(req, res, next)=>{
   Handling Post request for getting Artisants how have
   as same region as the app user (artisants added by user)
 */
-router.post('/artisantsByRegion',(req, res, next)=>{
+router.post('/artisansByRegion',(req, res, next)=>{
   var criteria = {
                     region:{
-                      regionname:req.body.regionname
+                      regionname:"occitanie"
+                      //req.body.regionname
                     }
                   };
-  Artisant.find(criteria)
+  Artisan.find(criteria)
   .exec()
   .then(artisants =>{
-    res.status(200).json(artisants);
+    res.status(200).json({
+      artisants: artisants
+    });
   })
   .catch(err =>{
-    console.log('No document found');
+    console.log('No artisan\'s found');
   });
 });
 /*
   This function handles increment the number of votes of an artisant
 */
 router.put('/updatevote',(req, res)=>{
-  var criteria = {_id:req.body.artisantId};
+
+  var criteria = {_id:req.body.artisanId};
   var updates = {$inc:{'votes':1}}
-  Artisant.update(criteria,updates,false)
+  Artisan.updateOne(criteria,updates,false)
   .exec()
   .then(result =>{
     res.status(200).json({
-      message:"The artisant have been updated with success",
+      message:"The artisan have been updated with success",
       artisant: result
     });
   })
@@ -86,4 +96,19 @@ router.put('/updatevote',(req, res)=>{
   });
 
 });
+
+router.post('/artisans',(req, res, next)=>{
+  const criteria = {"location.county":{$eq:"Vaucluse"}};
+  Artisan.find(criteria)
+  .exec()
+  .then(artisans =>{
+    res.status(200).json({
+      artisans: artisans
+    });
+  })
+  .catch(err =>{
+    console.log('No artisans found');
+  });
+});
+
 module.exports = router

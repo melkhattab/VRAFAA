@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const db_connect = require('./db_connection');
 
 const userRoutes = require('./routes/users');
-const artisantRoutes = require('./routes/artisants');
+const artisantRoutes = require('./routes/artisans');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var artisantSchema = new Schema({
+var artisanSchema = new Schema({
   _id : mongoose.Schema.Types.ObjectId,
   fname:  String,
   lname: String,
   description:  String,
   votes: {
     type:Number,
-    t
     default:0
   },
   videos: [
@@ -22,10 +21,12 @@ var artisantSchema = new Schema({
     ref: 'User',
     required: true
   },
-  region: {
+  location:{
     longitude: String,
     latitude:String,
-    regionname: String
+    city:String,
+    county:String,
+    state: String,
   }
 });
-module.exports = mongoose.model("Artisant", artisantSchema);
+module.exports = mongoose.model("Artisan", artisanSchema);

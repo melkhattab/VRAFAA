@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 
 
+/**
+* return : list of users
+*/
 router.get('/users',(req, res, next)=>{
   User.find()
   .exec()
@@ -20,6 +23,9 @@ router.get('/users',(req, res, next)=>{
 
 });
 
+/**
+* This method handle user persistence that is received in request's body
+*/
 router.post('/add_user',(req, res, next)=>{
   const user = new User({
     _id : new mongoose.Types.ObjectId(),
@@ -27,21 +33,19 @@ router.post('/add_user',(req, res, next)=>{
     lname: req.body.lname,
     email: req.body.email,
     password: req.body.password,
-    region: {
-      longitude:req.body.longitude,
-      latitude:req.body.latitude,
-      regionname: req.body.regionname
-    }
   });
+  console.log('user received from client: '+user);
+
   user
   .save()
   .then(result =>{
+    console.log('User has been added successufly');
     res.status(200).json({
-      message: "Handeling post requests",
+      message: "User has been added successufly",
       user: user
     });
   }).catch(err =>{
-    console.log('user did not be added to dbase');
+    console.log('User has not been added to dbase');
   });
 
 });
