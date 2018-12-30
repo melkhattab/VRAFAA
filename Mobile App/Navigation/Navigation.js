@@ -5,6 +5,8 @@ import {
   createStackNavigator,
   createAppContainer
 } from 'react-navigation';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Artisans from '../Components/artisans'
 import UserAuthentification from '../Components/Forms/userAuthentification';
 import UserRegistration from '../Components/Forms/userRegistration';
@@ -35,11 +37,12 @@ const RegisterStack = createStackNavigator({
 });
 
 const SignInStack = createStackNavigator({
-  ArtisanForm:{
-    screen:ArtisanForm
-  },
+
   UserRegistration:{
     screen:UserAuthentification
+  },
+  ArtisanForm:{
+    screen:ArtisanForm
   },
   Artisants: {
     screen:Artisans,
@@ -53,12 +56,39 @@ export default RegisterStack ; */
 const TabNavigator = createBottomTabNavigator({
   Home:{
     screen:HomeStack,
-  },
-  SignIn:{
-    screen:RegisterStack,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons
+          name={'ios-home'}
+          size={26}
+          style={{ color: tintColor }}
+          />
+      )
+    }
   },
   SignUp:{
+    screen:RegisterStack,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons
+          name={'ios-person-add'}
+          size={26}
+          style={{ color: tintColor }}
+          />
+      )
+    }
+  },
+  SignIn:{
     screen:SignInStack,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons
+          name={'ios-log-in'}
+          size={26}
+          style={{ color: tintColor }}
+          />
+      )
+    }
   },
 });
 export default createAppContainer(TabNavigator);

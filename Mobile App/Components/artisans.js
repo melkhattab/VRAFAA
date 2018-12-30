@@ -6,7 +6,7 @@ import {
   ActivityIndicator, Dimensions,
   TouchableOpacity
 } from 'react-native';
-import { Badge, SearchBar } from 'react-native-elements';
+import { Badge, Divider, SearchBar } from 'react-native-elements';
 import _ from 'lodash'
 import artisans from '../Helpers/artisanData'
 import ArtisanItem from './artisanItem'
@@ -91,18 +91,30 @@ class Artisan extends React.Component {
     }
     return false;
   }
+  _renderSeparator = ()=>{
+    return(
+      <View
+      style={{
+        height:2,
+        backgroundColor:"#CED0CE",
+        width:"94%",
+        marginLeft: "3%",
+      }}
+        />
+    );
+  };
   render(){
 //    console.log('==========================each===================================');
     const {artisan} = this.props;
     return(
       this.state.isLoading ?
       <View style={{flex:1}}>
-        <View style={styles.searchBar}>
-          <SearchBar  placeholder="search ..."
-                        onChangeText={(text)=>this._handleRequest(text)}
-                        />
-        </View>
-        <View>
+        <SearchBar  placeholder="search ..."
+                    lightTheme round
+                    cancelIcon={{ type: 'font-awesome', name: 'chevron-left' }}
+                    onChangeText={(text)=>this._handleRequest(text)}
+                    />
+          <View>
           <View style={styles.activityIndicator}>
             <ActivityIndicator size="large" color="#330066"/>
           </View>
@@ -110,13 +122,12 @@ class Artisan extends React.Component {
       </View>
       :
       <View style={{flex:1}}>
-        <View style={styles.searchBar}>
-
-          <SearchBar  placeholder="search ..."
-                      lightTheme round
-                      onChangeText={(text)=>this._handleRequest(text)}
-                      />
-        </View>
+        <SearchBar  placeholder="search ..."
+                    lightTheme round
+                    cancelIcon={{ type: 'font-awesome', name: 'chevron-left' }}
+                    onChangeText={(text)=>this._handleRequest(text)}
+                    />
+        <Divider style={{ backgroundColor: 'blue', height:2 }} />
         <View>
           {/* Ici j'ai simplement repris l'exemple sur la documentation de la FlatList */}
           <FlatList
@@ -124,10 +135,11 @@ class Artisan extends React.Component {
             data = {this.state.artisans}
             keyExtractor={(item) => item._id}
             onReachedThreshold={0.5}
+            ItemSeparatorComponent={this._renderSeparator}
             onEndReached={()=>{
               console.log('end reached a mahmoud');
             }}
-            renderItem = {({item}) => <ArtisanItem artisan={item} displayArtisanDetails={this._displayArtisanDetails} />}
+            renderItem = {({item}) => <ArtisanItem index={0} artisan={item} displayArtisanDetails={this._displayArtisanDetails} />}
             />
         </View>
       </View>

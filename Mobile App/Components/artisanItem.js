@@ -7,13 +7,15 @@ import {
   Image, Icon,
   TouchableOpacity
 } from 'react-native' ;
+import Divider from 'react-native-elements'
 import { Ionicons, Entypo } from '@expo/vector-icons';
 var url = config.SERVER_URL;
 class ArtisanItem extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      artisan: this.props.artisan
+      artisan: this.props.artisan,
+      index: this.props.index
     }
   }
   registerVote(){
@@ -40,20 +42,19 @@ class ArtisanItem extends React.Component{
     console.log("I like this artisan"+this.state.artisans);
   }
   render(){
-    const {artisan, displayArtisanDetails} = this.props ;
+    const {artisan, displayArtisanDetails, index} = this.props ;
     return(
       <View>
       <TouchableOpacity
           onPress={()=>displayArtisanDetails(artisan)}
           style={styles.main_container}>
           <Image
-           style={styles.image}
+           style={styles.avatar}
            source={require('../assets/male.png')}
          />
          <View style={styles.content_container}>
            <View style={styles.header_container}>
                <Text style={styles.title_text}>{artisan.fname} {artisan.lname}</Text>
-               <Text style={styles.vote_text}>{artisan.votes}</Text>
                <Entypo  name="heart-outlined"
                         size={26}
                         color="green"
@@ -68,13 +69,11 @@ class ArtisanItem extends React.Component{
              {/* La propriété numberOfLines permet de couper un texte si celui-ci est trop long, il suffit de définir un nombre maximum de ligne */}
            </View>
            <View style={styles.date_container}>
-              <Text style={styles.date_text}>More ... {artisan.videos.url}</Text>
+              <Text style={styles.date_text}>Created on 01/01/18 {artisan.videos.url}</Text>
+              <Text style={styles.votes}>Votes : {artisan.votes}</Text>
            </View>
          </View>
       </TouchableOpacity>
-      <View
-        style={styles.hr}
-      />
       </View>
     )
   }
@@ -85,22 +84,25 @@ const styles = StyleSheet.create({
   main_container: {
     height: 120,
     flexDirection: 'row',
-    backgroundColor:'#36485f',
+    backgroundColor:'#F2EFFB',
+
   },
-  image: {
-    width: 100,
-    height: 100,
-    marginTop: 10,
+  avatar: {
+    width: 80,
+    height: 80,
+    marginTop: 20,
     marginLeft: 5,
-    //backgroundColor: 'gray'
+//    backgroundColor: '#fff'
   },
   content_container: {
     flex: 1,
     margin: 5,
+//    backgroundColor:'red',
   },
   header_container: {
     flex: 3,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingLeft:5,
   },
   title_text:{
     fontWeight: 'bold',
@@ -115,18 +117,35 @@ const styles = StyleSheet.create({
     color: '#666666'
   },
   description_container: {
-    flex: 6
+    flex: 6,
+    paddingLeft:5,
+    paddingRight:5,
+//    backgroundColor:'green'
   },
   description_text: {
     fontStyle: 'italic',
     color: '#666666'
   },
   date_container: {
-    backgroundColor:'green'
+//    backgroundColor:'gray',
+    flexDirection:'row',
+    paddingLeft:5,
   },
   date_text: {
-    textAlign: 'right',
+    flex:1,
+    textAlign: 'left',
+    fontSize: 10,
+    color:'gray',
+    fontStyle:'italic',
+//    backgroundColor:'cyan',
+  },
+  votes:{
     fontSize: 14,
+    fontWeight:'bold',
+    textAlign: 'right',
+//    color:'#fff',
+    marginRight: 5,
+//    backgroundColor:'black',
   },
   hr:{
     borderBottomColor: 'black',

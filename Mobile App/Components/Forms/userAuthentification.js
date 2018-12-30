@@ -3,11 +3,11 @@ import {
   StyleSheet,
   View,
   TextInput,
-  Button,
   FlatList,
   Text,
   TouchableOpacity, KeyboardAvoidingView,
 } from 'react-native';
+import {Button, Icon} from 'react-native-elements'
 import config from '../../configuration';
 class UserAuthentification extends React.Component {
   constructor(props){
