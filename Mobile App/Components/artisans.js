@@ -6,6 +6,7 @@ import {
   ActivityIndicator, Dimensions,
   TouchableOpacity
 } from 'react-native';
+import { Badge, SearchBar } from 'react-native-elements';
 import _ from 'lodash'
 import artisans from '../Helpers/artisanData'
 import ArtisanItem from './artisanItem'
@@ -16,6 +17,8 @@ class Artisan extends React.Component {
     this.state = {
       artisans:[],
       isLoading: true,
+      fullData:[],
+      query:''
     }
   }
   _displayArtisanDetails = (artisan)=>{
@@ -62,16 +65,31 @@ class Artisan extends React.Component {
     })
     .then((response) =>response.json())
     .then((responseJson)=> {
-      this.setState({artisans:responseJson.artisans});
+      this.setState({
+        artisans:responseJson.artisans,
+        fullData:responseJson.artisans
+      });
       this.setState({isLoading: false});
     })
     .catch((err)=>{
       console.log("error loading artisans "+err);
     });
   }
-  _registrationForm(){
-    const {navigate} = this.props.navigation ;
-    navigate("UserRegistration");
+  _handleRequest(text){
+    console.log(text);
+    const query = text.toLowerCase();
+    const filterdData = _.filter(this.state.fullData, artisan => {
+      return this._contains(artisan, query);
+    });
+    this.setState({query:query, artisans:filterdData});
+  }
+  _contains(artisan, query){
+    console.log("artisan name : "+artisan.fname+"  : query : "+query+" : test : "+artisan.fname.includes(query));
+    if( artisan.fname.toLowerCase().includes(query)||
+        artisan.lname.toLowerCase().includes(query)){
+      return true ;
+    }
+    return false;
   }
   render(){
 //    console.log('==========================each===================================');
@@ -80,16 +98,9 @@ class Artisan extends React.Component {
       this.state.isLoading ?
       <View style={{flex:1}}>
         <View style={styles.searchBar}>
-          <TextInput  placeholder='First name'
-                style={styles.textinput}
-                placeholderTextColor='#fff'
-                onChangeText={(fname)=>this.setState({fname:fname})}/>
-          <TouchableOpacity
-              onPress={()=>this._registrationForm()}
-              style={styles.buttonStyle}
-              >
-              <Text style={styles.btnText} >Search</Text>
-          </TouchableOpacity>
+          <SearchBar  placeholder="search ..."
+                        onChangeText={(text)=>this._handleRequest(text)}
+                        />
         </View>
         <View>
           <View style={styles.activityIndicator}>
@@ -100,16 +111,11 @@ class Artisan extends React.Component {
       :
       <View style={{flex:1}}>
         <View style={styles.searchBar}>
-          <TextInput  placeholder="Artisan's name"
-                style={styles.textinput}
-                placeholderTextColor='#fff'
-                onChangeText={(fname)=>this.setState({fname:fname})}/>
-          <TouchableOpacity
-              onPress={()=>this._registrationForm()}
-              style={styles.buttonStyle}
-              >
-              <Text style={styles.btnText} >Search</Text>
-          </TouchableOpacity>
+
+          <SearchBar  placeholder="search ..."
+                      lightTheme round
+                      onChangeText={(text)=>this._handleRequest(text)}
+                      />
         </View>
         <View>
           {/* Ici j'ai simplement repris l'exemple sur la documentation de la FlatList */}
@@ -137,24 +143,20 @@ const styles = StyleSheet.create({
   },
   searchBar:{
     flexDirection:'row',
-    marginLeft:10,
-    marginRight:10
+    backgroundColor:'#E6E0F8'
   },
   textinput:{
     flex:1,
     borderRadius: 15,
-    backgroundColor:'#36485f',
+    backgroundColor:'#BDBDBD',
     paddingBottom:5,
     paddingRight:10,
     marginBottom:10,
     marginTop:10,
     marginLeft:10,
     marginRight:10,
-    //borderBottomColor:'#199187',
-    borderBottomWidth:1,
     color:'#fff',
     fontWeight:'bold',
-
   },
   buttonStyle:{
     marginBottom:10,

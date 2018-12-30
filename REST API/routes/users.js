@@ -28,7 +28,7 @@ router.get('/users',(req, res, next)=>{
 */
 router.post('/add_user',(req, res, next)=>{
   const user = new User({
-    _id : new mongoose.Types.ObjectId(),
+    _id: new mongoose.Types.ObjectId(),
     fname: req.body.fname,
     lname: req.body.lname,
     email: req.body.email,

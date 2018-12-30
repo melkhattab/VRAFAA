@@ -19,7 +19,6 @@ class UserRegistration extends React.Component {
       password:'password',
       confirmPass:'password'
     };
-
   }
   _addUser(){
     if(this.state.confirmPass===this.state.password ){
@@ -37,8 +36,7 @@ class UserRegistration extends React.Component {
                 },
                 body:JSON.stringify(this.state),
               }
-      )
-      .then((response) =>response.json())
+      ).then((response) =>response.json())
       .then((responseJson)=> {
         console.log(responseJson);
         console.log("HOST_NAME:"+ config.SERVER_URL);
