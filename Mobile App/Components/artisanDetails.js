@@ -4,7 +4,7 @@ import {
   View, TextInput,
   FlatList, Button,
   StyleSheet, Text,
-  Image, Icon,
+  Image, Icon,ScrollView
 } from 'react-native' ;
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import VideoItem from './VideoItem'
@@ -37,96 +37,80 @@ class ArtisanDetails extends React.Component{
     // });
     console.log("I like this artisan"+this.state.artisans);
   }
-  artisanDetails(){
-    console.log("View more details");
+  _displayArtisan(){
+    const artisan = this.props.navigation.state.params.artisan ;
+    return (
+        <ScrollView style={styles.scrollview_container}>
+          <View style={{justifyContent:'center', alignItems:'center'}}>
+            <Image
+              style={styles.image}
+              source={require("../assets/male.png")}
+            />
+            <Text style={styles.title_text}>{artisan.fname} {artisan.lname}</Text>
+          </View>
+          <View>
+            <Text style={styles.description_text}>{artisan.description} </Text>
+            <Text style={styles.default_text}>Votes : {artisan.votes} times</Text>
+            <Text style={styles.default_text}>Created on : 01/01/2018</Text>
+            <Text style={styles.default_text}>Created by : EL KHATTAB Mahmoud</Text>
+          </View>
+        </ScrollView>
+      );
   }
   render(){
-    const artisan = this.props.navigation.state.params.artisan ;
     return(
-      <View>
       <View style={styles.main_container}>
-        <Image
-         style={styles.image}
-         source={{uri: "image"}}
-       />
-       <View style={styles.content_container}>
-         <View style={styles.header_container}>
-             <Text style={styles.title_text}>{artisan.fname} {artisan.lname}</Text>
-             <Text style={styles.vote_text}>{artisan.votes}</Text>
-             <Entypo  name="heart-outlined"
-                      size={32}
-                      color="green"
-                      onPress={()=>this.registerVote()}
-            />
-         </View>
-         <View style={styles.description_container}>
-           <Text style={styles.description_text} >{artisan.description}</Text>
-           {/* La propriété numberOfLines permet de couper un texte si celui-ci est trop long, il suffit de définir un nombre maximum de ligne */}
-         </View>
-       </View>
+        {this._displayArtisan()}
       </View>
-      <View style={styles.videos_container}>
-        <FlatList
-          data = {artisan.videos}
-          keyExtractor={(item) => item.url}
-          renderItem = {({item}) => <VideoItem video={item}/>}
-          />
-      </View>
-      </View>
-
-    )
+    );
   }
 }
 export default ArtisanDetails
 
 const styles = StyleSheet.create({
   main_container: {
-    height: 160,
-    flexDirection: 'row'
+    flex: 1
+  },
+  loading_container: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    //alignItems: 'center',
+    //justifyContent: 'center'
+  },
+  scrollview_container: {
+    flex: 1,
   },
   image: {
-    width: 100,
-    height: 140,
-    margin: 5,
-    backgroundColor: 'gray'
-  },
-  content_container: {
-    flex: 1,
-    margin: 5,
-    backgroundColor:'green',
-  },
-  header_container: {
-    flex: 3,
-    flexDirection: 'row'
+    height: 180,
+    width: 180,
+    marginTop: 10,
+    flex:1,
   },
   title_text: {
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 20,
     flex: 1,
     flexWrap: 'wrap',
-    paddingRight: 5
-  },
-  vote_text: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: '#666666'
-  },
-  description_container: {
-    flex: 6
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    marginBottom: 10,
+    color: '#000000',
+    textAlign: 'center'
   },
   description_text: {
     fontStyle: 'italic',
-    color: '#666666'
+    color: '#666666',
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 15
   },
-  date_container: {
-    flex: 1
-  },
-  date_text: {
-    textAlign: 'right',
-    fontSize: 14
-  },
-  videos_container:{
-
-    backgroundColor:'red'
+  default_text: {
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 5,
   }
 })

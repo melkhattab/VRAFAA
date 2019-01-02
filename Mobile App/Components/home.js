@@ -5,20 +5,21 @@ import {
   ActivityIndicator, Dimensions,
   TouchableOpacity
 } from 'react-native';
+import {
+  ImagePicker
+}
+from 'expo';
 import _ from 'lodash'
 import config from '../configuration';
 
+//var RNFetchBlob = require('rn-fetch-blob').default
 class Home extends React.Component {
   constructor(props) {
     super(props);
+    const url = config.SERVER_URL+'upload';
     this.state = {
-      artisans:[],
-      isLoading: true,
-      latitude:null,
-      longitude:null,
-      city:'',
-      county:'',
-      state:''
+      video:null,
+      url:url,
     }
   }
   _locationGeoCoding(url){
@@ -36,6 +37,7 @@ class Home extends React.Component {
         console.log("Getting state, county and city failed"+err);
       });
   }
+/*
   componentDidMount(){
     navigator.geolocation.getCurrentPosition((position)=>{
       lat = position.coords.latitude;
@@ -52,16 +54,58 @@ class Home extends React.Component {
         });
     });
   }
+  */
+
+  takePicture = async() =>{
+      //const data = FormData();
+      const options = {
+        mediaTypes:ImagePicker.MediaTypeOptions.Videos,
+        allowsEditing: true,
+        quality:1,
+        base64: true,
+      }
+      const result = await ImagePicker.launchImageLibraryAsync(options);
+      if (!result.cancelled){
+        this.setState({
+          video: result,
+        });
+        this._uploadVideo();
+      }
+  };
+  _uploadVideo(){
+    const data = new FormData();
+    const video = this.state.video;
+    data.append('name', 'avatar');
+    data.append('fileData', {
+      uri : video.uri,
+      type: video.type,
+      name: 'video.mp4.'
+     });
+     const config = {
+      method: 'POST',
+      headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'multipart/form-data',
+      },
+      body: data,
+     };
+
+    fetch(this.state.url + "upload", config)
+     .then((response)=>{
+       console.log(response);
+     })
+     .catch((err)=>{console.log(err)});
+    console.log(data);
+  }
   render(){
     const {artisan} = this.props;
     return(
       <View>
         <Text> Bonjour Mahmoud, your are at : </Text>
-        <Text> Your Longitude: {this.state.longitude}</Text>
-        <Text> Your Latitude : {this.state.latitude}</Text>
-        <Text> City Name:   {this.state.city} </Text>
-        <Text> Departement: {this.state.county}  </Text>
-        <Text> Region Name: {this.state.state} </Text>
+
+        <TouchableOpacity onPress={this.takePicture.bind(this)}>
+          <Text>Take picture</Text>
+        </TouchableOpacity>
       </View>
     )
   }

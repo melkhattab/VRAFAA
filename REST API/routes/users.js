@@ -23,6 +23,30 @@ router.get('/users',(req, res, next)=>{
 
 });
 
+router.post('/signIn',(req, res, next)=>{
+  const email = req.body.email ;
+  const password = req.body.password ;
+
+  const criteria = {"email":{$eq:email}, "password":{$eq:password}};
+  User
+  .findOne(criteria)
+  .then((user)=>{
+    if(user!==null){
+      res.status(200).json({
+        message:"login success",
+        artisant: user,
+      });
+    }
+    else {
+      res.status(200).json({
+        message:"User not found",
+      });
+    }
+  })
+  .catch((err)=>{
+      console.log('login failed');
+  })
+});
 /**
 * This method handle user persistence that is received in request's body
 */

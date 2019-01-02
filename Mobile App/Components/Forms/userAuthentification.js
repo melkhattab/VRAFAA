@@ -25,12 +25,10 @@ class UserAuthentification extends React.Component {
 
   }
   _addUser(){
-    if(this.state.confirmPass===this.state.password ){
       console.log('Post request for adding user : '+this.state);
-      const {navigate} = navigation ;
-      navigate("Artisants")
-      /* -- This code marche bien
-      const url = config.SERVER_URL+'add_user';
+      const {navigate} = this.props.navigation ;
+      /* -- This code marche bien */
+      const url = config.SERVER_URL+'signIn';
       fetch(url,{
                 method:'POST',
                 headers:{
@@ -48,11 +46,6 @@ class UserAuthentification extends React.Component {
       .catch((err)=>{
         console.log("error adding artisan "+err);
       });
-      */
-    }
-    else{
-      console.log('passwords do not match');
-    }
   }
   _cancelAddingUser(){
     console.log('cancel adding user to dbase');
