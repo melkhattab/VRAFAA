@@ -90,5 +90,17 @@ const TabNavigator = createBottomTabNavigator({
       )
     }
   },
+  addArtisan:{
+    screen:ArtisanForm,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons
+          name={'ios-person-add'}
+          size={26}
+          style={{ color: tintColor }}
+          />
+      )
+    }
+  },
 });
 export default createAppContainer(TabNavigator);

@@ -4,7 +4,18 @@ const mongoose = require('mongoose');
 const Artisan = require('../models/artisan');
 const User = require('../models/user');
 const bodyParser = require("body-parser");
-
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function(req, file, cb){
+    cb(null, './uploads');
+  },
+  filename:function(req, file, cb){
+    console.log('ggggggggggggggggggg');
+    console.log(file);
+    cb(null, new Date().toISOString()+file.originalname);
+  }
+});
+const upload = multer({storage:storage})
 /* Handling post request for adding an artisant
   Artisant will be attached to the user how have added it
 */
@@ -24,7 +35,7 @@ router.post('/add_artisan',(req, res, next)=>{
         state:req.body.state,
       }
   });
-  
+
   artisan
     .save()
     .then(result =>{
@@ -109,6 +120,16 @@ router.post('/artisans',(req, res, next)=>{
   .catch(err =>{
     console.log('No artisans found');
   });
+});
+
+router.post('/upload',(req, res, next)=>{
+  console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+  console.log(req);
+
+  res.status(200).json({
+    message: 'the file was uploaded successufly'
+  });
+
 });
 
 module.exports = router

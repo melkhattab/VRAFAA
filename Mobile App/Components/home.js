@@ -73,29 +73,44 @@ class Home extends React.Component {
       }
   };
   _uploadVideo(){
-    const data = new FormData();
+    const formData = new FormData();
     const video = this.state.video;
-    data.append('name', 'avatar');
-    data.append('fileData', {
-      uri : video.uri,
-      type: video.type,
-      name: 'video.mp4.'
-     });
-     const config = {
+//    formData.append('name', 'avatar');
+    formData.append('file',this.state.video);
+     const options = {
       method: 'POST',
+      body: JSON.stringify(formData),
       headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'multipart/form-data',
-      },
-      body: data,
-     };
+        Accept: 'application/json',
 
-    fetch(this.state.url + "upload", config)
+      },
+    };
+    console.log('formData =====> ');
+    console.log(formData);
+     /*
+     console.log('formData =====> ');
+     console.log(formData);
+     const reqConfig = {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+     console.log(this.state.url);
+     console.log(reqConfig);*/
+     console.log(this.state.url);
+    fetch(this.state.url, options)
      .then((response)=>{
+       console.log('========================> upload file with success');
        console.log(response);
      })
-     .catch((err)=>{console.log(err)});
-    console.log(data);
+     .catch((err)=>{
+       console.log(err);
+       console.log('========================> upload file failed');
+     });
+
   }
   render(){
     const {artisan} = this.props;

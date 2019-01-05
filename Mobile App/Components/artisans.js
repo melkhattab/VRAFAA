@@ -103,6 +103,9 @@ class Artisan extends React.Component {
         />
     );
   };
+  _handleRefresh = ()=>{
+    console.log('l9lawwwwwwwwwwwwwwwwwiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+  }
   render(){
 //    console.log('==========================each===================================');
     const {artisan} = this.props;
@@ -140,6 +143,7 @@ class Artisan extends React.Component {
               console.log('end reached a mahmoud');
             }}
             renderItem = {({item}) => <ArtisanItem index={0} artisan={item} displayArtisanDetails={this._displayArtisanDetails} />}
+            extraData={this.state}
             />
         </View>
       </View>
