@@ -121,15 +121,26 @@ router.post('/artisans',(req, res, next)=>{
     console.log('No artisans found');
   });
 });
-
 router.post('/upload',(req, res, next)=>{
-  console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
   console.log(req);
 
   res.status(200).json({
     message: 'the file was uploaded successufly'
   });
 
+});
+
+router.post('/allArtisans',(req, res, next)=>{
+  Artisan.find().exec()
+  .then(artisans =>{
+    res.status(200).json({
+      message:'Request succed',
+      artisans: artisans
+    });
+  })
+  .catch(err =>{
+    console.log('No artisan found');
+  });
 });
 
 module.exports = router

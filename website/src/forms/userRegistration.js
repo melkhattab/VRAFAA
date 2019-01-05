@@ -36,7 +36,7 @@ class UserResgistration extends Component {
               <label>Last Name</label>
               <input  type="text"
                       value={this.state.value}
-                      onChange={this.handleChange.bind(this)}
+                      onChange={this.state.value}
                     />
             </div>
             <div className="email">
@@ -62,7 +62,8 @@ class UserResgistration extends Component {
             </div>
             <div className="createAccount">
               <button  type="submit"
-                      value="Submit">
+                      value="Submit"
+                      onClick={this.handleSubmit.bind(this)}>
                       Create Account
               </button>
               <small>Already have an account ?</small>

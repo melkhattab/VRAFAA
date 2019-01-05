@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://192.168.0.13:4000/'; // dev
+const SERVER_URL = 'http://192.168.1.41:4000/'; // dev
 
 const API_GEOLOC = 'https://eu1.locationiq.com/v1/reverse.php?';
 const API_GEOLOC_TOKEN ='key=pk.394ca4b9d21ea143534bb5523fb8efb8';
