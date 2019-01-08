@@ -52,6 +52,11 @@ router.post('/signIn',(req, res, next)=>{
 * This method handle user persistence that is received in request's body
 */
 router.post('/add_user',(req, res, next)=>{
+  console.log(req.body.fname);
+  console.log(req.body.lname);
+  console.log(req.body.email);
+  console.log(req.body.password);
+
   const user = new User({
     _id: new mongoose.Types.ObjectId(),
     fname: req.body.fname,
@@ -72,4 +77,29 @@ router.post('/add_user',(req, res, next)=>{
   });
 
 });
+
+
+/************/
+
+router.put('/setWinner',(req, res)=>{
+  console.log("winner id is : ", req.body.creator);
+
+  var criteria = {_id:req.body.creator};
+  var updates = {'$iswinner':1}
+  User.updateOne(criteria,updates,false)
+  .exec()
+  .then(result =>{
+    res.status(200).json({
+      message:"The winner have been updated with success",
+      artisant: result
+    });
+  })
+  .catch(err =>{
+    console.log('No user correspond to the given id');
+  });
+
+
+});
+
+
 module.exports = router

@@ -6,7 +6,6 @@ class MenuBar extends Component {
     super(props);
   }
   logout(){
-    console.log('gggggggggggggggggggggggggggggggggg');
     window.sessionStorage.setItem("user_id", null);
   }
   render(){
@@ -16,6 +15,7 @@ class MenuBar extends Component {
             <ul>
               <li>Home</li>
               <li>Profile </li>
+              <li><Link to="/winnersPerRegion">Winners per region</Link></li>
               <li><Link to="/user/login" onClick={this.logout()}>Log out</Link></li>
             </ul>
           </div>

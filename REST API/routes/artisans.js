@@ -109,7 +109,7 @@ router.put('/updatevote',(req, res)=>{
 });
 
 router.post('/artisans',(req, res, next)=>{
-  const criteria = {"location.county":{$eq:"Vaucluse"}};
+  var criteria = {"location.county":{$eq:"Vaucluse"}};
   Artisan.find(criteria)
   .exec()
   .then(artisans =>{
@@ -123,7 +123,6 @@ router.post('/artisans',(req, res, next)=>{
 });
 router.post('/upload',(req, res, next)=>{
   console.log(req);
-
   res.status(200).json({
     message: 'the file was uploaded successufly'
   });
@@ -142,7 +141,25 @@ router.post('/allArtisans',(req, res, next)=>{
     console.log('No artisan found');
   });
 });
-/**
+router.post('/winnersPerState',(req, res, next)=>{
+  var criteria = { $group: { _id: "$location.state", total: { $max: "$votes"}}};
+  Artisan.aggregate([
+        {
+            $group: {
+                _id: '$location.state',  //$region is the column name in collection
+                count: {$max: "$votes"}
+            }
+        }
+    ]).then((result)=>{
+      status(200).json({
+        message:'Request succed',
+        artisans: result
+      });
+    }).catch(err=>{
+      status(405).json({
+        message:'Request failed',
+      });
+    })
+});
 
-*/
 module.exports = router

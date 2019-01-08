@@ -5,20 +5,25 @@ import 'react-table/react-table.css';
 import config from '../config/configFile';
 import MenuBar from '../includes/menuBar'
 import  {Redirect} from 'react-router-dom'
-class ArtisansList extends Component {
+class WinnerPerRegion extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      artisans: null,
-      fullData:null
+      fullData: null,
+      data:[]
     };
     this.handleRequest= this.handleRequest.bind(this)
     console.log('constructor');
 
   }
-  componentDidMount(){
+  componentWillMount(){
     console.log("componentWillMount");
     this.handleRequest();
+  }
+  componentDidMount(){
+    console.log("componentDidlMount");
+    console.log(this.state.artisans);
+    console.log('hhhh');
   }
   componentWillUnMount(){
     console.log("componentWillUnMount");
@@ -35,53 +40,11 @@ class ArtisansList extends Component {
       console.log(err.response.data);
     });
   }
-  _winnersPerRegion = (event)=>{
-    event.preventDefault();
-    var allStates = [];
-    this.state.artisans.map(artisan => {
-      console.log(artisan.location.state);
-      if(allStates.includes(artisan.location.state)=== false){
-        allStates.push(artisan.location.state);
-      }
-    });
-    if(this.state.artisans !== null){
-      this.setState({fullData:this.state.artisans});
-      this.setState({artisans:[]});
-    }
-    // selection the max
-    var max_votes = 0 ;
-    var winner = null;
-    var winnersPerState = [];
-
-    allStates.map(state => {
-      this.state.artisans.map(artisan => {
-        //console.log("maxvotes: "+max_votes+" : artisan : artisan : "+ artisan.fname+" :votes: "+artisan.votes +": state : "+artisan.location.state);
-        if(artisan.votes >= max_votes && artisan.location.state === state ){
-          max_votes = artisan.votes ;
-          winner = artisan ;
-        }
-      });
-      if(winner !== null){
-        winnersPerState.push(winner) ;
-      }
-      winner = null ;
-      max_votes = 0;
-    });
-    this.setState({fullData:this.state.artisans})
-    this.setState({artisans:winnersPerState});
-
-  }
-  _allArtisans = (event)=>{
-    if(this.state.fullData !== null){
-      this.setState({artisans:this.state.fullData});
-      this.setState({fullData:[]})
-    }
-  }
 
   render() {
-
+    console.log(this.state.artisans);
+    console.log('rendering');
     const columns=[
-
       {
         Header:"First Name",
         accessor:"fname",
@@ -135,25 +98,7 @@ class ArtisansList extends Component {
       {
         Header:"Actions",
         Cell: props=>{
-          return(
-            <button className=""
-                    onClick={ (event)=>{
-                      var winner_id = props.original.creator ;
-                      console.log("the global winner is : ",props.original.creator)
-
-                      const url = config.SERVER_URL+'setWinner';
-                      console.log(" url ::::::::::::::: ", url);
-                      axios.put(url, {
-                        creator:winner_id,
-                      })
-                      .then(response => {
-                        console.log("Winner is set");
-                      }).catch(err =>{
-                        console.log("Winner is not set", err);
-                      });
-                    }}>
-              Winner
-            </button>)
+          return(<button className="">Choisir</button>)
         },
         width:100,
         minWidth:100,
@@ -169,10 +114,6 @@ class ArtisansList extends Component {
         return(
           <div>
             <MenuBar />
-            <div style={{width:"26%", marginLeft:"64%"}}>
-              <button  onClick={this._allArtisans}> All Artisans</button>
-              <button  onClick={this._winnersPerRegion}> Winners Per Ragion Artisans</button>
-            </div>
             <div style={{width:"80%", marginLeft:"10%"}}>
             <ReactTable
               columns={columns}
@@ -192,8 +133,13 @@ class ArtisansList extends Component {
           <div> Downloading ...</div>
         )
       }
-
+  /*
+    }
+    else{
+      console.log("gvvvvvvvvvvvvvvvvvvvvvvvvv");
+      return(<Redirect to="/user/login" />);
+    }*/
   }
 }
 
-export default ArtisansList;
+export default WinnerPerRegion;

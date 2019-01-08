@@ -7,7 +7,11 @@ var userSchema = new Schema({
   fname:  String,
   lname:  String,
   email:  String,
-  password:String
+  password:String,
+  iswinner:{
+    type:Number,
+    default:0
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

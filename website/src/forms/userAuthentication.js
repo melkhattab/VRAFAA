@@ -4,18 +4,19 @@ import './userRegistration.css';
 import config from '../config/configFile';
 import UserProfile from '../data/userProfile';
 import ArtisansList from '../artisans/artisansList'
-import {BrowserRouter, Router, Redirect} from 'react-router-dom'
+import {BrowserRouter, Router, Redirect, Link} from 'react-router-dom'
 
 class UserAuthentication extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       email:'',
       password: ''
     };
   }
-
+  componentWillMount(){
+    console.log("l7elwa:"+window.sessionStorage.getItem("user_id"));
+  }
   handleChangeEmail=(event)=>{
     this.setState({email:event.target.value});
   }
@@ -40,22 +41,16 @@ class UserAuthentication extends Component {
       window.sessionStorage.setItem("lname", response.data.user.lname);
       window.sessionStorage.setItem("email", response.data.user.email);
       var user = window.sessionStorage.getItem("user_id");
-      return(
-        <Redirect to="/artisans" />
-      );
-
+      this.props.history.push("/artisans");
     })
     .catch(err =>{
-      console.log("user authentication failed");
-      console.log(err.response.data);
+      console.log("user authentication failed"+err);
     });
-    //event.preventDefault();
   }
   render(){
-
     var user_id = window.sessionStorage.getItem("user_id");
     console.log("user id : "+(user_id==="null"));
-    if(user_id === "null"){
+    if(user_id === "null" || user_id === null){
       return (
         <div className="wrapper">
           <div className="form-wrapper">
@@ -80,7 +75,7 @@ class UserAuthentication extends Component {
                       >
                       Log In
                 </button>
-                <small>Don't have an account ? Sign up</small>
+                <small>Don't have an account ? <Link to="/user/sign_up">Sign up</Link></small>
               </div>
             </form>
           </div>
@@ -89,6 +84,7 @@ class UserAuthentication extends Component {
     }
     else{
       console.log("dddddddddddddddddddddddddddddddddd");
+      console.log(window.sessionStorage.getItem("user_id")===null);
       return(<Redirect to="/artisans" />);
     }
   }
