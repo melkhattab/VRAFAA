@@ -6,6 +6,7 @@ var cors = require('cors');
 
 const userRoutes = require('./routes/users');
 const artisantRoutes = require('./routes/artisans');
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

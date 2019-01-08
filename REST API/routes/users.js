@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/user');
-
-
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 /**
 * return : list of users
 */
@@ -34,7 +34,7 @@ router.post('/signIn',(req, res, next)=>{
     if(user!==null){
       res.status(200).json({
         message:"login success",
-        artisant: user,
+        user: user,
       });
     }
     else {
@@ -48,33 +48,6 @@ router.post('/signIn',(req, res, next)=>{
   })
 });
 
-/**
-
-*/
-router.post('/signIn',(req, res, next)=>{
-  console.log('user : '+JSON.stringify(req.body.body));
-  const email = req.body.body.email ;
-  const password = req.body.body.password ;
-  const criteria = {"email":{$eq:email}, "password":{$eq:password}};
-  User
-  .findOne(criteria)
-  .then((user)=>{
-    if(user!==null){
-      res.status(200).json({
-        message:"login success",
-        artisant: user,
-      });
-    }
-    else {
-      res.status(404).json({
-        message:"User not found",
-      });
-    }
-  })
-  .catch((err)=>{
-      console.log('login failed');
-  })
-});
 /**
 * This method handle user persistence that is received in request's body
 */
@@ -86,8 +59,6 @@ router.post('/add_user',(req, res, next)=>{
     email: req.body.email,
     password: req.body.password,
   });
-  console.log('user received from client: '+user);
-
   user
   .save()
   .then(result =>{

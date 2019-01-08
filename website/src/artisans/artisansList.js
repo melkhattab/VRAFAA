@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import './style.css';
 import axios from 'axios'
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import config from '../config/configFile';
-
+import MenuBar from '../includes/menuBar'
 class ArtisansList extends Component {
   constructor(props) {
     super(props);
@@ -70,16 +69,32 @@ class ArtisansList extends Component {
         accessor:"description",
         sortable:false
       },
+      {
+        Header:"Actions",
+        Cell: props=>{
+          return(<button className="">Choisir</button>)
+        },
+        width:100,
+        minWidth:100,
+        maxWidth:100,
+      },
     ]
 
     const artisans = this.state.artisans;
     if(artisans){
       return(
-        <ReactTable
-          columns={columns}
-          data={artisans}
-          >
-        </ReactTable>
+        <div>
+          <MenuBar />
+          <div style={{width:"80%", marginLeft:"10%"}}>
+          <ReactTable
+            columns={columns}
+            data={artisans}
+            noDataText={"Please wait until we bring data for you ..."}
+            showPagination={false}
+            >
+          </ReactTable>
+          </div>
+        </div>
       );
     }
     else{

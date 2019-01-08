@@ -142,5 +142,7 @@ router.post('/allArtisans',(req, res, next)=>{
     console.log('No artisan found');
   });
 });
+/**
 
+*/
 module.exports = router

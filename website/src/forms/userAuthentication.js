@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './userRegistration.css';
 import config from '../config/configFile';
-import axios from 'axios';
+import UserProfile from '../data/userProfile';
+import ArtisansList from '../artisans/artisansList'
+import {BrowserRouter, Router, Redirect} from 'react-router-dom'
 
 class UserAuthentication extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       email:'',
       password: ''
@@ -22,24 +26,24 @@ class UserAuthentication extends Component {
 
   handleSubmit= (event)=>{
     event.preventDefault();
-    console.log("Handling submit:");
-    console.log({
-      email: this.state.email,
-      password: this.state.password,
-    });
 
     const url = config.SERVER_URL+'signIn';
     axios.post(url,{
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state)
+      password:this.state.password,
+      email:this.state.email
     })
     .then(response => {
       console.log("user authentication succed ");
-      console.log(response);
+      UserProfile.setUser(response.data.user);
+      window.sessionStorage.setItem("user_id", response.data.user._id);
+      window.sessionStorage.setItem("fname", response.data.user.fname);
+      window.sessionStorage.setItem("lname", response.data.user.lname);
+      window.sessionStorage.setItem("email", response.data.user.email);
+      var user = window.sessionStorage.getItem("user_id");
+      return(
+        <Redirect to="/artisans" />
+      );
+
     })
     .catch(err =>{
       console.log("user authentication failed");
@@ -47,38 +51,46 @@ class UserAuthentication extends Component {
     });
     //event.preventDefault();
   }
+  render(){
 
-  render() {
-    return (
-      <div className="wrapper">
-        <div className="form-wrapper">
-          <h2> Sign In </h2>
-          <form  onSubmit={this.handleSubmit} noValidate>
-            <div className="email">
-              <label>E-mail</label>
-              <input  type="text"
-                      onChange={this.handleChangeEmail}
-                    />
-            </div>
-            <div className="password">
-              <label>Password</label>
-              <input  type="password"
-                      onChange={this.handleChangePassword}
-                    />
-            </div>
-            <div className="createAccount">
-              <button
-                    type="submit"
-                    value="Submit"
-                    >
-                    Log In
-              </button>
-              <small>Don't have an account ? Sign up</small>
-            </div>
-          </form>
+    var user_id = window.sessionStorage.getItem("user_id");
+    console.log("user id : "+(user_id==="null"));
+    if(user_id === "null"){
+      return (
+        <div className="wrapper">
+          <div className="form-wrapper">
+            <h2> Sign In </h2>
+            <form  onSubmit={this.handleSubmit} noValidate>
+              <div className="email">
+                <label>E-mail</label>
+                <input  type="text"
+                        onChange={this.handleChangeEmail}
+                      />
+              </div>
+              <div className="password">
+                <label>Password</label>
+                <input  type="password"
+                        onChange={this.handleChangePassword}
+                      />
+              </div>
+              <div className="createAccount">
+                <button
+                      type="submit"
+                      value="Submit"
+                      >
+                      Log In
+                </button>
+                <small>Don't have an account ? Sign up</small>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
+    else{
+      console.log("dddddddddddddddddddddddddddddddddd");
+      return(<Redirect to="/artisans" />);
+    }
   }
 }
 
